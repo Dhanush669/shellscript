@@ -1,0 +1,26 @@
+<?php
+echo "PHP is running";
+$dbhost ="localhost";
+$dbname = "userdb";
+$uname = "myuser";
+$password = "1234";
+$conc = new mysqli($dbhost, $uname, $password, $dbname);
+if($conc->connect_error) {
+                die('Could not connect: ' . $conc->connect_error);
+}
+echo '--------- MySQL Connected successfully -------';
+$sql1 = "CREATE TABLE IF NOT EXISTS students ( rollno INT, name VARCHAR(50), dep VARCHAR(20));";
+if ($conc->query($sql1) === TRUE) {
+          echo "\nTable Persons created successfully";
+              $sql = "insert into students values (30,'Dhanush','CSE');";
+              if ($conc->query($sql) === TRUE) {
+              echo "\n New record created successfully";
+              }
+                  else {
+                    echo "Error: " . $sql . "<br>" . $conc->error;
+                    }
+} else {
+          echo "Error creating table: " . $conc->error;
+}
+$conn->close();
+?>

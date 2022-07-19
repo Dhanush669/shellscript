@@ -1,0 +1,7 @@
+#!/usr/bin/bash
+echo "clonning repo"
+git clone https://dhanush_gd@bitbucket.org/dhanush_gd/phpproj.git
+echo "gtihub repo clonning success"
+echo "adding application to apache"
+cp phpproj/myphp.php /var/www/html/
+echo "done"

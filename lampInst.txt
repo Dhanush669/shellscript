@@ -1,0 +1,93 @@
+#!/usr/bin/bash
+if [ "$(id -u)" != "0" ]; then
+   echo "This script must be run as root"
+   exit 1
+fi
+#myvar=$(lsb_release -i)
+#myarr=($myvar)
+#ver="${myarr[2]}"
+#cver="Ubuntu"
+#if [ "$ver" == "$cver" ]; then
+#    ubunt_Inst
+#else
+#    redhat_Inst
+#fi
+ubunt_Inst(){
+     sudo apt update
+     echo "LAMP Installation with Debian"
+     echo "Installing Apache2"
+     isApache=$(which apache2)
+     if [-z $isApache];then
+          sudo apt install apache2 -y
+     fi
+     echo "Apache Installed"
+     echo "Installing Mysql"
+     ismysql=$(which mysql)
+     if [-z $ismysql];then
+          sudo apt install mysql-server -y
+     fi
+     echo "MySql Installed"
+     echo "Installing Php"
+     isphp=$(which php)
+     if [-z $isphp];then
+         sudo apt install php libapache2-mod-php php-mysql -y
+     fi
+     echo "php Installed"
+     startServer
+     status
+}
+redhat_Inst(){
+     sudo apt update
+     echo "LAMP Installation with RedHat"
+     echo "Installing Apache2"
+     isApache=$(which apache2)
+     if [-z $isApache];then
+          sudo yum install apache2 -y
+     fi
+     echo "Apache Installed"
+     echo "Installing Mysql"
+     ismysql=$(which mysql)
+     if [-z $ismysql];then
+          sudo yum install mysql-server -y
+     fi
+     echo "MySql Installed"
+     echo "Installing Php"
+     isphp=$(which php)
+     if [-z $isphp];then
+         sudo yum install php libapache2-mod-php php-mysql -y
+     fi
+     echo "php Installed"
+     startServer
+     status
+}
+startServer(){
+     apachestat=$(service apache2 status)
+     mysqlstat=$(service mysql status)
+     if [[ $servstat != *"active (running)"* ]]; then
+         echo "Starting apache"
+	 sudo systemctl start apache2
+	 echo "apache started"
+     fi
+     if [[ $mysqlstat != *"active (running)"* ]]; then
+         echo "Starting mysql"
+         sudo systemctl start mysql
+         echo "mysql started"
+     fi
+}
+status(){
+     apachestat=$(service apache2 status)
+     mysqlstat=$(service mysql status)
+     echo "Apache Status"
+     echo "$apachestat"
+     echo "Mysql status"
+     echo "$mysqlstat"
+}
+myvar=$(lsb_release -i)
+myarr=($myvar)
+ver="${myarr[2]}"
+cver="Ubuntu"
+if [ "$ver" == "$cver" ]; then
+    ubunt_Inst
+else
+    redhat_Inst
+fi
